@@ -1,6 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const { getRelatorios, sendReportViaEmail } = require('../controllers/relatorioController');
+const { 
+  getRelatorios, 
+  sendReportViaEmail, 
+  sendParticularReportViaEmail, 
+  sendHealthPlanReportViaEmail 
+} = require('../controllers/relatorioController');
 const { protect } = require('../middleware/authMiddleware');
 
 router.route('/')
@@ -8,5 +13,11 @@ router.route('/')
 
 router.route('/email')
   .post(protect, sendReportViaEmail);
+
+router.route('/email/particular')
+  .post(protect, sendParticularReportViaEmail);
+
+router.route('/email/plano-saude')
+  .post(protect, sendHealthPlanReportViaEmail);
 
 module.exports = router;

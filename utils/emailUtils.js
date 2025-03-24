@@ -147,6 +147,19 @@ const sendParticularReportEmail = async (to, reportData, fisioterapeutaName) => 
     procedimentosDetalhados 
   } = reportData;
 
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('pt-BR');
+  };
+
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    }).format(value);
+  };
+
   const htmlContent = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
       <h2 style="color: #0d6efd; text-align: center;">Relatório de Produção Particular - FisiMaster</h2>
@@ -232,6 +245,19 @@ const sendHealthPlanReportEmail = async (to, reportData, fisioterapeutaName) => 
     periodoFim,
     procedimentosDetalhados 
   } = reportData;
+
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('pt-BR');
+  };
+
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    }).format(value);
+  };
 
   const htmlContent = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">

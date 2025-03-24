@@ -97,7 +97,7 @@ const sendReportEmail = async (to, reportData, fisioterapeutaName) => {
             </tr>
           </thead>
           <tbody>
-            ${procedimentosDetalhados.map(proc => `
+            ${procedimentosDetalhados.filter(proc => proc.planoSaude !== 'Particular').map(proc => `
               <tr>
                 <td style="padding: 8px; border-bottom: 1px solid #ddd;">${proc.pacienteNome}</td>
                 <td style="padding: 8px; border-bottom: 1px solid #ddd;">${proc.planoSaude}</td>

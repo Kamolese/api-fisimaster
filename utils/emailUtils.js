@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const XLSX = require('xlsx');
 
 const transporter = nodemailer.createTransport({
   host: process.env.EMAIL_HOST,
@@ -9,6 +10,82 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_PASS,
   },
 });
+
+/**
+
+ * @param {object} reportData
+ * @returns {Buffer} Excel file buffer
+ */
+const generateExcelReport = (reportData) => {
+  const { 
+    totalProcedimentos, 
+    producao, 
+    producaoParticular,
+    producaoPlanoSaude,
+    totalParticular,
+    totalPlanoSaude,
+    evolucoesGeradas, 
+    pacientesAtendidos, 
+    periodoInicio, 
+    periodoFim,
+    procedimentosDetalhados 
+  } = reportData;
+
+  const formatDate = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('pt-BR');
+  };
+
+  // Create workbook and worksheets
+  const workbook = XLSX.utils.book_new();
+  
+  // Resumo worksheet
+  const resumoData = [
+    ['Relatório de Produção - FisiMaster'],
+    [`Período: ${formatDate(periodoInicio)} até ${formatDate(periodoFim)}`],
+    [],
+    ['Resumo'],
+    ['Descrição', 'Valor'],
+    ['Produção Total', (producaoParticular + producaoPlanoSaude).toFixed(2)],
+    ['Procedimentos Particulares', totalParticular || 0],
+    ['Produção Particulares', producaoParticular.toFixed(2)],
+    ['Procedimentos Planos de Saúde', totalPlanoSaude || 0],
+    ['Produção Planos de Saúde', producaoPlanoSaude.toFixed(2)],
+    ['Evoluções Geradas', evolucoesGeradas],
+    ['Pacientes Atendidos', pacientesAtendidos]
+  ];
+  
+  const resumoSheet = XLSX.utils.aoa_to_sheet(resumoData);
+  XLSX.utils.book_append_sheet(workbook, resumoSheet, 'Resumo');
+  
+  // Procedimentos worksheet
+  const procedimentosHeaders = [
+    'Paciente', 
+    'Plano de Saúde', 
+    'Primeiro Procedimento', 
+    'Último Procedimento', 
+    'Total Procedimentos',
+    'Valor Total'
+  ];
+  
+  const procedimentosRows = procedimentosDetalhados.map(proc => [
+    proc.pacienteNome,
+    proc.planoSaude,
+    formatDate(proc.primeiroProcedimento),
+    formatDate(proc.ultimoProcedimento),
+    proc.totalProcedimentos,
+    proc.planoSaude !== 'Particular' ? (proc.totalProcedimentos * 5).toFixed(2) : ''
+  ]);
+  
+  const procedimentosData = [procedimentosHeaders, ...procedimentosRows];
+  const procedimentosSheet = XLSX.utils.aoa_to_sheet(procedimentosData);
+  XLSX.utils.book_append_sheet(workbook, procedimentosSheet, 'Procedimentos Detalhados');
+  
+  // Convert to buffer
+  const excelBuffer = XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' });
+  return excelBuffer;
+};
 
 /**
  * Send email
@@ -117,11 +194,20 @@ const sendReportEmail = async (to, reportData, fisioterapeutaName) => {
     </div>
   `;
 
+  // Generate Excel file
+  const excelBuffer = generateExcelReport(reportData);
+  
   const mailOptions = {
     from: `"FisiMaster" <${process.env.EMAIL_USER}>`,
     to,
     subject: `Relatório - Período: ${formatDate(periodoInicio)} a ${formatDate(periodoFim)}`,
     html: htmlContent,
+    attachments: [
+      {
+        filename: `Relatorio_FisiMaster_${formatDate(periodoInicio)}_a_${formatDate(periodoFim).replace(/\//g, '-')}.xlsx`,
+        content: excelBuffer
+      }
+    ]
   };
 
   return transporter.sendMail(mailOptions);

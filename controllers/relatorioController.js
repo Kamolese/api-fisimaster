@@ -52,12 +52,37 @@ const getRelatorios = asyncHandler(async (req, res) => {
   ))];
   const pacientesAtendidos = pacientesAtendidosIds.length;
   
-  const procedimentosDetalhados = procedimentos.map(proc => ({
-    pacienteNome: proc.paciente.nome,
-    planoSaude: proc.paciente.planoSaude,
-    dataRealizacao: proc.dataRealizacao,
-    valorPlano: proc.valorPlano
-  }));
+  const procedimentosPorPaciente = {};
+  
+  procedimentos.forEach(proc => {
+    const pacienteId = proc.paciente._id.toString();
+    if (!procedimentosPorPaciente[pacienteId]) {
+      procedimentosPorPaciente[pacienteId] = {
+        pacienteNome: proc.paciente.nome,
+        planoSaude: proc.paciente.planoSaude,
+        procedimentos: [],
+        totalProcedimentos: 0
+      };
+    }
+    procedimentosPorPaciente[pacienteId].procedimentos.push({
+      dataRealizacao: proc.dataRealizacao,
+      valorPlano: proc.valorPlano
+    });
+    procedimentosPorPaciente[pacienteId].totalProcedimentos++;
+  });
+  
+  const procedimentosDetalhados = Object.values(procedimentosPorPaciente).map(paciente => {
+  
+    paciente.procedimentos.sort((a, b) => new Date(a.dataRealizacao) - new Date(b.dataRealizacao));
+    
+    return {
+      pacienteNome: paciente.pacienteNome,
+      planoSaude: paciente.planoSaude,
+      primeiroProcedimento: paciente.procedimentos[0].dataRealizacao,
+      ultimoProcedimento: paciente.procedimentos[paciente.procedimentos.length - 1].dataRealizacao,
+      totalProcedimentos: paciente.totalProcedimentos
+    };
+  });
 
   res.status(200).json({
     totalProcedimentos,
@@ -129,12 +154,37 @@ const sendReportViaEmail = asyncHandler(async (req, res) => {
   ))];
   const pacientesAtendidos = pacientesAtendidosIds.length;
   
-  const procedimentosDetalhados = procedimentos.map(proc => ({
-    pacienteNome: proc.paciente.nome,
-    planoSaude: proc.paciente.planoSaude,
-    dataRealizacao: proc.dataRealizacao,
-    valorPlano: proc.valorPlano
-  }));
+  // Agrupar procedimentos por paciente
+  const procedimentosPorPaciente = {};
+  
+  procedimentos.forEach(proc => {
+    const pacienteId = proc.paciente._id.toString();
+    if (!procedimentosPorPaciente[pacienteId]) {
+      procedimentosPorPaciente[pacienteId] = {
+        pacienteNome: proc.paciente.nome,
+        planoSaude: proc.paciente.planoSaude,
+        procedimentos: [],
+        totalProcedimentos: 0
+      };
+    }
+    procedimentosPorPaciente[pacienteId].procedimentos.push({
+      dataRealizacao: proc.dataRealizacao,
+      valorPlano: proc.valorPlano
+    });
+    procedimentosPorPaciente[pacienteId].totalProcedimentos++;
+  });
+  
+  const procedimentosDetalhados = Object.values(procedimentosPorPaciente).map(paciente => {
+    paciente.procedimentos.sort((a, b) => new Date(a.dataRealizacao) - new Date(b.dataRealizacao));
+    
+    return {
+      pacienteNome: paciente.pacienteNome,
+      planoSaude: paciente.planoSaude,
+      primeiroProcedimento: paciente.procedimentos[0].dataRealizacao,
+      ultimoProcedimento: paciente.procedimentos[paciente.procedimentos.length - 1].dataRealizacao,
+      totalProcedimentos: paciente.totalProcedimentos
+    };
+  });
 
   const reportData = {
     totalProcedimentos,

@@ -91,7 +91,9 @@ const sendReportEmail = async (to, reportData, fisioterapeutaName) => {
             <tr style="background-color: #f8f9fa;">
               <th style="padding: 8px; border-bottom: 1px solid #ddd; text-align: left;">Paciente</th>
               <th style="padding: 8px; border-bottom: 1px solid #ddd; text-align: left;">Plano de Saúde</th>
-              <th style="padding: 8px; border-bottom: 1px solid #ddd; text-align: left;">Data</th>
+              <th style="padding: 8px; border-bottom: 1px solid #ddd; text-align: left;">Primeiro Procedimento</th>
+              <th style="padding: 8px; border-bottom: 1px solid #ddd; text-align: left;">Último Procedimento</th>
+              <th style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">Total</th>
             </tr>
           </thead>
           <tbody>
@@ -99,7 +101,9 @@ const sendReportEmail = async (to, reportData, fisioterapeutaName) => {
               <tr>
                 <td style="padding: 8px; border-bottom: 1px solid #ddd;">${proc.pacienteNome}</td>
                 <td style="padding: 8px; border-bottom: 1px solid #ddd;">${proc.planoSaude}</td>
-                <td style="padding: 8px; border-bottom: 1px solid #ddd;">${formatDate(proc.dataRealizacao)}</td>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd;">${formatDate(proc.primeiroProcedimento)}</td>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd;">${formatDate(proc.ultimoProcedimento)}</td>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${proc.totalProcedimentos}</td>
               </tr>
             `).join('')}
           </tbody>

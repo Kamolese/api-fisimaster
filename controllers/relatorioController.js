@@ -1,7 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const Procedimento = require('../models/procedimentoModel');
 const Paciente = require('../models/pacienteModel');
-const { sendReportEmail } = require('../utils/emailUtils');
+const { sendReportEmail, sendParticularReportEmail, sendHealthPlanReportEmail } = require('../utils/emailUtils');
 
 const getRelatorios = asyncHandler(async (req, res) => {
   const { startDate, endDate } = req.query;

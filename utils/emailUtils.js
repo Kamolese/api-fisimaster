@@ -78,10 +78,6 @@ const sendReportEmail = async (to, reportData, fisioterapeutaName) => {
             <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${formatCurrency(producaoPlanoSaude || 0)}</td>
           </tr>
           <tr>
-            <td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Evoluções Geradas:</strong></td>
-            <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${evolucoesGeradas}</td>
-          </tr>
-          <tr>
             <td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Evoluções Particulares:</strong></td>
             <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${evolucoesGeradasParticular}</td>
           </tr>
@@ -189,10 +185,6 @@ const sendParticularReportEmail = async (to, reportData, fisioterapeutaName) => 
             <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${formatCurrency(producaoParticular || 0)}</td>
           </tr>
           <tr>
-            <td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Evoluções Geradas:</strong></td>
-            <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${evolucoesGeradas}</td>
-          </tr>
-          <tr>
             <td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Evoluções Particulares:</strong></td>
             <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${evolucoesGeradasParticular}</td>
           </tr>
@@ -298,7 +290,7 @@ const sendHealthPlanReportEmail = async (to, reportData, fisioterapeutaName) => 
             <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${formatCurrency(producaoPlanoSaude || 0)}</td>
           </tr>
           <tr>
-            <td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Evoluções Geradas:</strong></td>
+            <td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Evoluções Planos de Saúde:</strong></td>
             <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${evolucoesGeradasPlanoSaude}</td>
           </tr>
           <tr>

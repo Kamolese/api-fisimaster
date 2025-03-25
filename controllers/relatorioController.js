@@ -45,7 +45,7 @@ const getRelatorios = asyncHandler(async (req, res) => {
   
   const totalPlanoSaudeMultiplicado = procedimentosPlanoSaude.length * 5;
   
-  const evolucoesGeradas = totalProcedimentos;
+  const evolucoesGeradas = procedimentosPlanoSaude.length;
   
   const pacientesAtendidosIds = [...new Set(procedimentos.map(proc => 
     proc.paciente._id.toString()
@@ -154,7 +154,7 @@ const sendReportViaEmail = asyncHandler(async (req, res) => {
   
   const totalPlanoSaudeMultiplicado = procedimentosPlanoSaude.length * 5;
   
-  const evolucoesGeradas = totalProcedimentos;
+  const evolucoesGeradas = procedimentosPlanoSaude.length;
   
   const pacientesAtendidosIds = [...new Set(procedimentos.map(proc => 
     proc.paciente._id.toString()
@@ -266,7 +266,7 @@ const sendParticularReportViaEmail = asyncHandler(async (req, res) => {
     return total + (proc.valorPlano || 0);
   }, 0);
   
-  const evolucoesGeradas = totalProcedimentos;
+  const evolucoesGeradas = procedimentosPlanoSaude.length;
   
   const pacientesAtendidosIds = [...new Set(procedimentos.map(proc => 
     proc.paciente._id.toString()
@@ -377,7 +377,7 @@ const sendHealthPlanReportViaEmail = asyncHandler(async (req, res) => {
   
   const totalPlanoSaudeMultiplicado = procedimentosPlanoSaude.length * 5;
   
-  const evolucoesGeradas = totalProcedimentos;
+  const evolucoesGeradas = procedimentosPlanoSaude.length;
   
   const pacientesAtendidosIds = [...new Set(procedimentos.map(proc => 
     proc.paciente._id.toString()

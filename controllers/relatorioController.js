@@ -45,7 +45,10 @@ const getRelatorios = asyncHandler(async (req, res) => {
   
   const totalPlanoSaudeMultiplicado = procedimentosPlanoSaude.length * 5;
   
-  const evolucoesGeradas = procedimentosPlanoSaude.length;
+  // Count evolutions for each type of patient
+  const evolucoesGeradasParticular = procedimentosParticular.filter(proc => proc.evolucao).length;
+  const evolucoesGeradasPlanoSaude = procedimentosPlanoSaude.filter(proc => proc.evolucao).length;
+  const evolucoesGeradas = evolucoesGeradasParticular + evolucoesGeradasPlanoSaude;
   
   const pacientesAtendidosIds = [...new Set(procedimentos.map(proc => 
     proc.paciente._id.toString()
@@ -99,6 +102,8 @@ const getRelatorios = asyncHandler(async (req, res) => {
     totalParticular: procedimentosParticular.length,
     totalPlanoSaude: totalPlanoSaudeMultiplicado,
     evolucoesGeradas,
+    evolucoesGeradasParticular,
+    evolucoesGeradasPlanoSaude,
     pacientesAtendidos,
     periodoInicio: start,
     periodoFim: end,
@@ -154,7 +159,10 @@ const sendReportViaEmail = asyncHandler(async (req, res) => {
   
   const totalPlanoSaudeMultiplicado = procedimentosPlanoSaude.length * 5;
   
-  const evolucoesGeradas = procedimentosPlanoSaude.length;
+  // Count evolutions for each type of patient
+  const evolucoesGeradasParticular = procedimentosParticular.filter(proc => proc.evolucao).length;
+  const evolucoesGeradasPlanoSaude = procedimentosPlanoSaude.filter(proc => proc.evolucao).length;
+  const evolucoesGeradas = evolucoesGeradasParticular + evolucoesGeradasPlanoSaude;
   
   const pacientesAtendidosIds = [...new Set(procedimentos.map(proc => 
     proc.paciente._id.toString()
@@ -208,6 +216,8 @@ const sendReportViaEmail = asyncHandler(async (req, res) => {
     totalParticular: procedimentosParticular.length,
     totalPlanoSaude: totalPlanoSaudeMultiplicado, 
     evolucoesGeradas,
+    evolucoesGeradasParticular,
+    evolucoesGeradasPlanoSaude,
     pacientesAtendidos,
     periodoInicio: start,
     periodoFim: end,
@@ -266,7 +276,10 @@ const sendParticularReportViaEmail = asyncHandler(async (req, res) => {
     return total + (proc.valorPlano || 0);
   }, 0);
   
-  const evolucoesGeradas = procedimentosPlanoSaude.length;
+  // Count evolutions for each type of patient
+  const evolucoesGeradasParticular = procedimentosParticular.filter(proc => proc.evolucao).length;
+  const evolucoesGeradasPlanoSaude = procedimentosPlanoSaude.filter(proc => proc.evolucao).length;
+  const evolucoesGeradas = evolucoesGeradasParticular + evolucoesGeradasPlanoSaude;
   
   const pacientesAtendidosIds = [...new Set(procedimentos.map(proc => 
     proc.paciente._id.toString()
@@ -317,6 +330,8 @@ const sendParticularReportViaEmail = asyncHandler(async (req, res) => {
     totalParticular: procedimentosParticular.length,
     producaoParticular,
     evolucoesGeradas,
+    evolucoesGeradasParticular,
+    evolucoesGeradasPlanoSaude,
     pacientesAtendidos,
     periodoInicio: start,
     periodoFim: end,
@@ -377,7 +392,10 @@ const sendHealthPlanReportViaEmail = asyncHandler(async (req, res) => {
   
   const totalPlanoSaudeMultiplicado = procedimentosPlanoSaude.length * 5;
   
-  const evolucoesGeradas = procedimentosPlanoSaude.length;
+  // Count evolutions for each type of patient
+  const evolucoesGeradasParticular = procedimentosParticular.filter(proc => proc.evolucao).length;
+  const evolucoesGeradasPlanoSaude = procedimentosPlanoSaude.filter(proc => proc.evolucao).length;
+  const evolucoesGeradas = evolucoesGeradasParticular + evolucoesGeradasPlanoSaude;
   
   const pacientesAtendidosIds = [...new Set(procedimentos.map(proc => 
     proc.paciente._id.toString()
@@ -428,6 +446,8 @@ const sendHealthPlanReportViaEmail = asyncHandler(async (req, res) => {
     totalPlanoSaude: totalPlanoSaudeMultiplicado,
     producaoPlanoSaude,
     evolucoesGeradas,
+    evolucoesGeradasParticular,
+    evolucoesGeradasPlanoSaude,
     pacientesAtendidos,
     periodoInicio: start,
     periodoFim: end,

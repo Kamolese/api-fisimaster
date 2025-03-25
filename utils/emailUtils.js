@@ -79,11 +79,11 @@ const sendReportEmail = async (to, reportData, fisioterapeutaName) => {
           </tr>
           <tr>
             <td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Evoluções Particulares:</strong></td>
-            <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${evolucoesGeradasParticular}</td>
+            <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${evolucoesGeradasParticular || 0}</td>
           </tr>
           <tr>
             <td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Evoluções Planos de Saúde:</strong></td>
-            <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${evolucoesGeradasPlanoSaude}</td>
+            <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${evolucoesGeradasPlanoSaude || 0}</td>
           </tr>
           <tr>
             <td style="padding: 8px;"><strong>Pacientes Atendidos:</strong></td>
@@ -186,11 +186,11 @@ const sendParticularReportEmail = async (to, reportData, fisioterapeutaName) => 
           </tr>
           <tr>
             <td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Evoluções Particulares:</strong></td>
-            <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${evolucoesGeradasParticular}</td>
+            <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${evolucoesGeradasParticular || 0}</td>
           </tr>
           <tr>
             <td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Evoluções Planos de Saúde:</strong></td>
-            <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${evolucoesGeradasPlanoSaude}</td>
+            <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${evolucoesGeradasPlanoSaude || 0}</td>
           </tr>
           <tr>
             <td style="padding: 8px;"><strong>Pacientes Atendidos:</strong></td>
@@ -291,7 +291,7 @@ const sendHealthPlanReportEmail = async (to, reportData, fisioterapeutaName) => 
           </tr>
           <tr>
             <td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Evoluções Planos de Saúde:</strong></td>
-            <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${evolucoesGeradasPlanoSaude}</td>
+            <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${evolucoesGeradasPlanoSaude || 0}</td>
           </tr>
           <tr>
             <td style="padding: 8px;"><strong>Pacientes Atendidos:</strong></td>

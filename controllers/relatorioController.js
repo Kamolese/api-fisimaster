@@ -48,7 +48,7 @@ const getRelatorios = asyncHandler(async (req, res) => {
   const evolucoesGeradasPlanoSaude = procedimentosPlanoSaude.length;
   const evolucoesGeradas = evolucoesGeradasParticular + evolucoesGeradasPlanoSaude;
   
-  const pacientesAtendidosIds = [...new Set(procedimentos.map(proc => 
+  const pacientesAtendidosIds = [...new Set(procedimentosPlanoSaude.map(proc => 
     proc.paciente._id.toString()
   ))];
   const pacientesAtendidos = pacientesAtendidosIds.length;
@@ -161,7 +161,8 @@ const sendReportViaEmail = asyncHandler(async (req, res) => {
   const evolucoesGeradasPlanoSaude = procedimentosPlanoSaude.length;
   const evolucoesGeradas = evolucoesGeradasParticular + evolucoesGeradasPlanoSaude;
   
-  const pacientesAtendidosIds = [...new Set(procedimentos.map(proc => 
+  // Filter to only include patients with health plans (not particular)
+  const pacientesAtendidosIds = [...new Set(procedimentosPlanoSaude.map(proc => 
     proc.paciente._id.toString()
   ))];
   const pacientesAtendidos = pacientesAtendidosIds.length;
@@ -193,17 +194,20 @@ const sendReportViaEmail = asyncHandler(async (req, res) => {
     procedimentosPorPaciente[pacienteId].totalProcedimentos++;
   });
   
-  const procedimentosDetalhados = Object.values(procedimentosPorPaciente).map(paciente => {
-    paciente.procedimentos.sort((a, b) => new Date(a.dataRealizacao) - new Date(b.dataRealizacao));
-    
-    return {
-      pacienteNome: paciente.pacienteNome,
-      planoSaude: paciente.planoSaude,
-      primeiroProcedimento: paciente.procedimentos[0].dataRealizacao,
-      ultimoProcedimento: paciente.procedimentos[paciente.procedimentos.length - 1].dataRealizacao,
-      totalProcedimentos: paciente.totalProcedimentos
-    };
-  });
+  const procedimentosDetalhados = Object.values(procedimentosPorPaciente)
+    // Filter to only include patients with health plans (not particular)
+    .filter(paciente => paciente.planoSaude !== 'Particular')
+    .map(paciente => {
+      paciente.procedimentos.sort((a, b) => new Date(a.dataRealizacao) - new Date(b.dataRealizacao));
+      
+      return {
+        pacienteNome: paciente.pacienteNome,
+        planoSaude: paciente.planoSaude,
+        primeiroProcedimento: paciente.procedimentos[0].dataRealizacao,
+        ultimoProcedimento: paciente.procedimentos[paciente.procedimentos.length - 1].dataRealizacao,
+        totalProcedimentos: paciente.totalProcedimentos
+      };
+    });
 
   const reportData = {
     totalProcedimentos,
@@ -278,7 +282,8 @@ const sendParticularReportViaEmail = asyncHandler(async (req, res) => {
   const evolucoesGeradasPlanoSaude = procedimentosPlanoSaude.length;
   const evolucoesGeradas = evolucoesGeradasParticular + evolucoesGeradasPlanoSaude;
   
-  const pacientesAtendidosIds = [...new Set(procedimentos.map(proc => 
+  // Filter to only include patients with health plans (not particular)
+  const pacientesAtendidosIds = [...new Set(procedimentosPlanoSaude.map(proc => 
     proc.paciente._id.toString()
   ))];
   const pacientesAtendidos = pacientesAtendidosIds.length;
@@ -309,17 +314,20 @@ const sendParticularReportViaEmail = asyncHandler(async (req, res) => {
     procedimentosPorPaciente[pacienteId].totalProcedimentos++;
   });
   
-  const procedimentosDetalhados = Object.values(procedimentosPorPaciente).map(paciente => {
-    paciente.procedimentos.sort((a, b) => new Date(a.dataRealizacao) - new Date(b.dataRealizacao));
-    
-    return {
-      pacienteNome: paciente.pacienteNome,
-      planoSaude: paciente.planoSaude,
-      primeiroProcedimento: paciente.procedimentos[0].dataRealizacao,
-      ultimoProcedimento: paciente.procedimentos[paciente.procedimentos.length - 1].dataRealizacao,
-      totalProcedimentos: paciente.totalProcedimentos
-    };
-  });
+  const procedimentosDetalhados = Object.values(procedimentosPorPaciente)
+    // Filter to only include patients with health plans (not particular)
+    .filter(paciente => paciente.planoSaude !== 'Particular')
+    .map(paciente => {
+      paciente.procedimentos.sort((a, b) => new Date(a.dataRealizacao) - new Date(b.dataRealizacao));
+      
+      return {
+        pacienteNome: paciente.pacienteNome,
+        planoSaude: paciente.planoSaude,
+        primeiroProcedimento: paciente.procedimentos[0].dataRealizacao,
+        ultimoProcedimento: paciente.procedimentos[paciente.procedimentos.length - 1].dataRealizacao,
+        totalProcedimentos: paciente.totalProcedimentos
+      };
+    });
 
   const reportData = {
     totalProcedimentos,
@@ -345,9 +353,9 @@ const sendParticularReportViaEmail = asyncHandler(async (req, res) => {
 });
 
 /**
- * @desc 
- * @route   
- * @access  
+ * @desc    Send health plan report via email
+ * @route   POST /api/relatorios/email/plano-saude
+ * @access  Private
  */
 const sendHealthPlanReportViaEmail = asyncHandler(async (req, res) => {
   const { email } = req.body;
@@ -393,7 +401,8 @@ const sendHealthPlanReportViaEmail = asyncHandler(async (req, res) => {
   const evolucoesGeradasPlanoSaude = procedimentosPlanoSaude.length;
   const evolucoesGeradas = evolucoesGeradasParticular + evolucoesGeradasPlanoSaude;
   
-  const pacientesAtendidosIds = [...new Set(procedimentos.map(proc => 
+  // Filter to only include patients with health plans (not particular)
+  const pacientesAtendidosIds = [...new Set(procedimentosPlanoSaude.map(proc => 
     proc.paciente._id.toString()
   ))];
   const pacientesAtendidos = pacientesAtendidosIds.length;
@@ -424,17 +433,20 @@ const sendHealthPlanReportViaEmail = asyncHandler(async (req, res) => {
     procedimentosPorPaciente[pacienteId].totalProcedimentos++;
   });
   
-  const procedimentosDetalhados = Object.values(procedimentosPorPaciente).map(paciente => {
-    paciente.procedimentos.sort((a, b) => new Date(a.dataRealizacao) - new Date(b.dataRealizacao));
-    
-    return {
-      pacienteNome: paciente.pacienteNome,
-      planoSaude: paciente.planoSaude,
-      primeiroProcedimento: paciente.procedimentos[0].dataRealizacao,
-      ultimoProcedimento: paciente.procedimentos[paciente.procedimentos.length - 1].dataRealizacao,
-      totalProcedimentos: paciente.totalProcedimentos
-    };
-  });
+  const procedimentosDetalhados = Object.values(procedimentosPorPaciente)
+    // Filter to only include patients with health plans (not particular)
+    .filter(paciente => paciente.planoSaude !== 'Particular')
+    .map(paciente => {
+      paciente.procedimentos.sort((a, b) => new Date(a.dataRealizacao) - new Date(b.dataRealizacao));
+      
+      return {
+        pacienteNome: paciente.pacienteNome,
+        planoSaude: paciente.planoSaude,
+        primeiroProcedimento: paciente.procedimentos[0].dataRealizacao,
+        ultimoProcedimento: paciente.procedimentos[paciente.procedimentos.length - 1].dataRealizacao,
+        totalProcedimentos: paciente.totalProcedimentos
+      };
+    });
 
   const reportData = {
     totalProcedimentos,

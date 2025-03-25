@@ -45,7 +45,7 @@ const getRelatorios = asyncHandler(async (req, res) => {
   
   const totalPlanoSaudeMultiplicado = procedimentosPlanoSaude.length * 5;
   const evolucoesGeradasParticular = procedimentosParticular.length;
-  const evolucoesGeradasPlanoSaude = procedimentosPlanoSaude.length;
+  const evolucoesGeradasPlanoSaude = procedimentosPlanoSaude.length * 5;
   const evolucoesGeradas = evolucoesGeradasParticular + evolucoesGeradasPlanoSaude;
   
   const pacientesAtendidosIds = [...new Set(procedimentos.map(proc => 

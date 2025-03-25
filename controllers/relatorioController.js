@@ -88,7 +88,8 @@ const getRelatorios = asyncHandler(async (req, res) => {
       planoSaude: paciente.planoSaude,
       primeiroProcedimento: paciente.procedimentos[0].dataRealizacao,
       ultimoProcedimento: paciente.procedimentos[paciente.procedimentos.length - 1].dataRealizacao,
-      totalProcedimentos: paciente.totalProcedimentos
+      totalProcedimentos: paciente.totalProcedimentos,
+      totalEvolucoes: paciente.evolucoes.length
     };
   });
 
@@ -205,7 +206,8 @@ const sendReportViaEmail = asyncHandler(async (req, res) => {
         planoSaude: paciente.planoSaude,
         primeiroProcedimento: paciente.procedimentos[0].dataRealizacao,
         ultimoProcedimento: paciente.procedimentos[paciente.procedimentos.length - 1].dataRealizacao,
-        totalProcedimentos: paciente.totalProcedimentos
+        totalProcedimentos: paciente.totalProcedimentos,
+        totalEvolucoes: paciente.evolucoes.length
       };
     });
 
@@ -325,7 +327,8 @@ const sendParticularReportViaEmail = asyncHandler(async (req, res) => {
         planoSaude: paciente.planoSaude,
         primeiroProcedimento: paciente.procedimentos[0].dataRealizacao,
         ultimoProcedimento: paciente.procedimentos[paciente.procedimentos.length - 1].dataRealizacao,
-        totalProcedimentos: paciente.totalProcedimentos
+        totalProcedimentos: paciente.totalProcedimentos,
+        totalEvolucoes: paciente.evolucoes.length
       };
     });
 
@@ -444,7 +447,8 @@ const sendHealthPlanReportViaEmail = asyncHandler(async (req, res) => {
         planoSaude: paciente.planoSaude,
         primeiroProcedimento: paciente.procedimentos[0].dataRealizacao,
         ultimoProcedimento: paciente.procedimentos[paciente.procedimentos.length - 1].dataRealizacao,
-        totalProcedimentos: paciente.totalProcedimentos
+        totalProcedimentos: paciente.totalProcedimentos,
+        totalEvolucoes: paciente.evolucoes.length
       };
     });
 

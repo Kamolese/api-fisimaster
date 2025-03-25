@@ -61,13 +61,20 @@ const getRelatorios = asyncHandler(async (req, res) => {
         pacienteNome: proc.paciente.nome,
         planoSaude: proc.paciente.planoSaude,
         procedimentos: [],
-        totalProcedimentos: 0
+        totalProcedimentos: 0,
+        evolucoes: []
       };
     }
     procedimentosPorPaciente[pacienteId].procedimentos.push({
       dataRealizacao: proc.dataRealizacao,
       valorPlano: proc.valorPlano
     });
+    if (proc.evolucao) {
+      procedimentosPorPaciente[pacienteId].evolucoes.push({
+        data: proc.dataRealizacao,
+        texto: proc.evolucao
+      });
+    }
     procedimentosPorPaciente[pacienteId].totalProcedimentos++;
   });
   
@@ -164,13 +171,20 @@ const sendReportViaEmail = asyncHandler(async (req, res) => {
         pacienteNome: proc.paciente.nome,
         planoSaude: proc.paciente.planoSaude,
         procedimentos: [],
-        totalProcedimentos: 0
+        totalProcedimentos: 0,
+        evolucoes: []
       };
     }
     procedimentosPorPaciente[pacienteId].procedimentos.push({
       dataRealizacao: proc.dataRealizacao,
       valorPlano: proc.valorPlano
     });
+    if (proc.evolucao) {
+      procedimentosPorPaciente[pacienteId].evolucoes.push({
+        data: proc.dataRealizacao,
+        texto: proc.evolucao
+      });
+    }
     procedimentosPorPaciente[pacienteId].totalProcedimentos++;
   });
   
@@ -269,13 +283,20 @@ const sendParticularReportViaEmail = asyncHandler(async (req, res) => {
         pacienteNome: proc.paciente.nome,
         planoSaude: proc.paciente.planoSaude,
         procedimentos: [],
-        totalProcedimentos: 0
+        totalProcedimentos: 0,
+        evolucoes: []
       };
     }
     procedimentosPorPaciente[pacienteId].procedimentos.push({
       dataRealizacao: proc.dataRealizacao,
       valorPlano: proc.valorPlano
     });
+    if (proc.evolucao) {
+      procedimentosPorPaciente[pacienteId].evolucoes.push({
+        data: proc.dataRealizacao,
+        texto: proc.evolucao
+      });
+    }
     procedimentosPorPaciente[pacienteId].totalProcedimentos++;
   });
   
@@ -373,13 +394,20 @@ const sendHealthPlanReportViaEmail = asyncHandler(async (req, res) => {
         pacienteNome: proc.paciente.nome,
         planoSaude: proc.paciente.planoSaude,
         procedimentos: [],
-        totalProcedimentos: 0
+        totalProcedimentos: 0,
+        evolucoes: []
       };
     }
     procedimentosPorPaciente[pacienteId].procedimentos.push({
       dataRealizacao: proc.dataRealizacao,
       valorPlano: proc.valorPlano
     });
+    if (proc.evolucao) {
+      procedimentosPorPaciente[pacienteId].evolucoes.push({
+        data: proc.dataRealizacao,
+        texto: proc.evolucao
+      });
+    }
     procedimentosPorPaciente[pacienteId].totalProcedimentos++;
   });
   

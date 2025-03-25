@@ -271,12 +271,12 @@ const sendParticularReportViaEmail = asyncHandler(async (req, res) => {
   const totalProcedimentos = procedimentos.length;
   
   const procedimentosParticular = procedimentos.filter(proc => proc.paciente.planoSaude === 'Particular');
+  const procedimentosPlanoSaude = procedimentos.filter(proc => proc.paciente.planoSaude !== 'Particular');
   
   const producaoParticular = procedimentosParticular.reduce((total, proc) => {
     return total + (proc.valorPlano || 0);
   }, 0);
   
-  // Count evolutions for each type of patient
   const evolucoesGeradasParticular = procedimentosParticular.filter(proc => proc.evolucao).length;
   const evolucoesGeradasPlanoSaude = procedimentosPlanoSaude.filter(proc => proc.evolucao).length;
   const evolucoesGeradas = evolucoesGeradasParticular + evolucoesGeradasPlanoSaude;
@@ -286,7 +286,6 @@ const sendParticularReportViaEmail = asyncHandler(async (req, res) => {
   ))];
   const pacientesAtendidos = pacientesAtendidosIds.length;
   
-  // Agrupar procedimentos por paciente
   const procedimentosPorPaciente = {};
   
   procedimentos.forEach(proc => {
@@ -349,9 +348,9 @@ const sendParticularReportViaEmail = asyncHandler(async (req, res) => {
 });
 
 /**
- * @desc    Send health plan report via email
- * @route   POST /api/relatorios/email/plano-saude
- * @access  Private
+ * @desc 
+ * @route   
+ * @access  
  */
 const sendHealthPlanReportViaEmail = asyncHandler(async (req, res) => {
   const { email } = req.body;
@@ -385,6 +384,7 @@ const sendHealthPlanReportViaEmail = asyncHandler(async (req, res) => {
   const totalProcedimentos = procedimentos.length;
   
   const procedimentosPlanoSaude = procedimentos.filter(proc => proc.paciente.planoSaude !== 'Particular');
+  const procedimentosParticular = procedimentos.filter(proc => proc.paciente.planoSaude === 'Particular');
   
   const producaoPlanoSaude = procedimentosPlanoSaude.reduce((total, proc) => {
     return total + (proc.valorPlano || 0);
@@ -392,7 +392,6 @@ const sendHealthPlanReportViaEmail = asyncHandler(async (req, res) => {
   
   const totalPlanoSaudeMultiplicado = procedimentosPlanoSaude.length * 5;
   
-  // Count evolutions for each type of patient
   const evolucoesGeradasParticular = procedimentosParticular.filter(proc => proc.evolucao).length;
   const evolucoesGeradasPlanoSaude = procedimentosPlanoSaude.filter(proc => proc.evolucao).length;
   const evolucoesGeradas = evolucoesGeradasParticular + evolucoesGeradasPlanoSaude;
@@ -402,7 +401,6 @@ const sendHealthPlanReportViaEmail = asyncHandler(async (req, res) => {
   ))];
   const pacientesAtendidos = pacientesAtendidosIds.length;
   
-  // Agrupar procedimentos por paciente
   const procedimentosPorPaciente = {};
   
   procedimentos.forEach(proc => {

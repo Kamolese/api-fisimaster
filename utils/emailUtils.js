@@ -113,7 +113,7 @@ const sendReportEmail = async (to, reportData, fisioterapeutaName) => {
                 <td style="padding: 8px; border-bottom: 1px solid #ddd;">${formatDate(proc.primeiroProcedimento)}</td>
                 <td style="padding: 8px; border-bottom: 1px solid #ddd;">${formatDate(proc.ultimoProcedimento)}</td>
                 <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${proc.planoSaude !== 'Particular' ? proc.totalProcedimentos * 5 : proc.totalProcedimentos}</td>
-                <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${proc.planoSaude !== 'Particular' ? Math.round((proc.totalProcedimentos * 5) / 5) : Math.round(proc.totalEvolucoes / 5)}</td>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${proc.planoSaude !== 'Particular' ? Math.round((proc.totalProcedimentos * 5) / 5) : proc.totalEvolucoes}</td>
               </tr>
             `).join('')}
           </tbody>
@@ -216,7 +216,7 @@ const sendParticularReportEmail = async (to, reportData, fisioterapeutaName) => 
                 <td style="padding: 8px; border-bottom: 1px solid #ddd;">${formatDate(proc.primeiroProcedimento)}</td>
                 <td style="padding: 8px; border-bottom: 1px solid #ddd;">${formatDate(proc.ultimoProcedimento)}</td>
                 <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${proc.totalProcedimentos}</td>
-                <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${Math.round((proc.totalEvolucoes) / 5)}</td>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${proc.totalEvolucoes}</td>
               </tr>
             `).join('')}
           </tbody>
@@ -321,7 +321,7 @@ const sendHealthPlanReportEmail = async (to, reportData, fisioterapeutaName) => 
                 <td style="padding: 8px; border-bottom: 1px solid #ddd;">${formatDate(proc.primeiroProcedimento)}</td>
                 <td style="padding: 8px; border-bottom: 1px solid #ddd;">${formatDate(proc.ultimoProcedimento)}</td>
                 <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${proc.planoSaude !== 'Particular' ? proc.totalProcedimentos * 5 : proc.totalProcedimentos}</td>
-                <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${proc.planoSaude !== 'Particular' ? Math.round((proc.totalProcedimentos * 5) / 5) : Math.round(proc.totalEvolucoes / 5)}</td>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${proc.planoSaude !== 'Particular' ? Math.round((proc.totalProcedimentos * 5) / 5) : proc.totalEvolucoes}</td>
               </tr>
             `).join('')}
           </tbody>

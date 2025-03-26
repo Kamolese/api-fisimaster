@@ -162,10 +162,6 @@ const sendParticularReportEmail = async (to, reportData, fisioterapeutaName) => 
             <td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Evoluções Particulares:</strong></td>
             <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${evolucoesGeradasParticular || 0}</td>
           </tr>
-          <tr>
-            <td style="padding: 8px;"><strong>Pacientes Atendidos:</strong></td>
-            <td style="padding: 8px; text-align: right;">${pacientesAtendidos}</td>
-          </tr>
         </table>
       </div>
       

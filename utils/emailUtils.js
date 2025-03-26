@@ -92,34 +92,6 @@ const sendReportEmail = async (to, reportData, fisioterapeutaName) => {
         </table>
       </div>
       
-      <div style="margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px;">
-        <h3 style="color: #0d6efd;">Procedimentos Detalhados</h3>
-        <table style="width: 100%; border-collapse: collapse;">
-          <thead>
-            <tr style="background-color: #f8f9fa;">
-              <th style="padding: 8px; border-bottom: 1px solid #ddd; text-align: left;">Paciente</th>
-              <th style="padding: 8px; border-bottom: 1px solid #ddd; text-align: left;">Plano de Saúde</th>
-              <th style="padding: 8px; border-bottom: 1px solid #ddd; text-align: left;">Primeiro Procedimento</th>
-              <th style="padding: 8px; border-bottom: 1px solid #ddd; text-align: left;">Último Procedimento</th>
-              <th style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">Procedimentos</th>
-              <th style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">Evoluções</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${procedimentosDetalhados.map(proc => `
-              <tr>
-                <td style="padding: 8px; border-bottom: 1px solid #ddd;">${proc.pacienteNome}</td>
-                <td style="padding: 8px; border-bottom: 1px solid #ddd;">${proc.planoSaude}</td>
-                <td style="padding: 8px; border-bottom: 1px solid #ddd;">${formatDate(proc.primeiroProcedimento)}</td>
-                <td style="padding: 8px; border-bottom: 1px solid #ddd;">${formatDate(proc.ultimoProcedimento)}</td>
-                <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${proc.planoSaude !== 'Particular' ? proc.totalProcedimentos * 5 : proc.totalProcedimentos}</td>
-                <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${proc.planoSaude !== 'Particular' ? Math.round((proc.totalProcedimentos * 5) / 5) : proc.totalEvolucoes}</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      </div>
-      
       <p style="color: #666; font-size: 12px; text-align: center;">
         Este relatório foi gerado automaticamente pelo sistema FisiMaster.<br>
         Não responda a este email.

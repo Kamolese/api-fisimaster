@@ -313,7 +313,7 @@ const sendHealthPlanReportEmail = async (to, reportData, fisioterapeutaName) => 
               <th style="padding: 8px; border-bottom: 1px solid #ddd; text-align: left;">Plano de Saúde</th>
               <th style="padding: 8px; border-bottom: 1px solid #ddd; text-align: left;">Primeiro Procedimento</th>
               <th style="padding: 8px; border-bottom: 1px solid #ddd; text-align: left;">Último Procedimento</th>
-              <th style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">Total</th>
+              <th style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">Procedimentos</th>
               <th style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">Evoluções</th>
             </tr>
           </thead>

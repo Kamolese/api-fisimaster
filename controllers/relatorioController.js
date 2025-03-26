@@ -48,7 +48,7 @@ const getRelatorios = asyncHandler(async (req, res) => {
   const evolucoesGeradasPlanoSaude = procedimentosPlanoSaude.length;
   const evolucoesGeradas = evolucoesGeradasParticular + evolucoesGeradasPlanoSaude;
   
-  const pacientesAtendidosIds = [...new Set(procedimentosParticular.map(proc => 
+  const pacientesAtendidosIds = [...new Set(procedimentosPlanoSaude.map(proc => 
     proc.paciente._id.toString()
   ))];
   const pacientesAtendidos = pacientesAtendidosIds.length;
@@ -162,7 +162,8 @@ const sendReportViaEmail = asyncHandler(async (req, res) => {
   const evolucoesGeradasPlanoSaude = procedimentosPlanoSaude.length;
   const evolucoesGeradas = evolucoesGeradasParticular + evolucoesGeradasPlanoSaude;
   
-  const pacientesAtendidosIds = [...new Set(procedimentosParticular.map(proc => 
+  // Filter to only include patients with health plans (not particular)
+  const pacientesAtendidosIds = [...new Set(procedimentosPlanoSaude.map(proc => 
     proc.paciente._id.toString()
   ))];
   const pacientesAtendidos = pacientesAtendidosIds.length;
@@ -195,6 +196,8 @@ const sendReportViaEmail = asyncHandler(async (req, res) => {
   });
   
   const procedimentosDetalhados = Object.values(procedimentosPorPaciente)
+    // Filter to only include patients with health plans (not particular)
+    .filter(paciente => paciente.planoSaude !== 'Particular')
     .map(paciente => {
       paciente.procedimentos.sort((a, b) => new Date(a.dataRealizacao) - new Date(b.dataRealizacao));
       
@@ -281,8 +284,8 @@ const sendParticularReportViaEmail = asyncHandler(async (req, res) => {
   const evolucoesGeradasPlanoSaude = procedimentosPlanoSaude.length;
   const evolucoesGeradas = evolucoesGeradasParticular + evolucoesGeradasPlanoSaude;
   
-  // Filter to include only particular patients
-  const pacientesAtendidosIds = [...new Set(procedimentosParticular.map(proc => 
+  // Filter to only include patients with health plans (not particular)
+  const pacientesAtendidosIds = [...new Set(procedimentosPlanoSaude.map(proc => 
     proc.paciente._id.toString()
   ))];
   const pacientesAtendidos = pacientesAtendidosIds.length;
@@ -314,7 +317,8 @@ const sendParticularReportViaEmail = asyncHandler(async (req, res) => {
   });
   
   const procedimentosDetalhados = Object.values(procedimentosPorPaciente)
-    .filter(paciente => paciente.planoSaude === 'Particular')
+    // Filter to only include patients with health plans (not particular)
+    .filter(paciente => paciente.planoSaude !== 'Particular')
     .map(paciente => {
       paciente.procedimentos.sort((a, b) => new Date(a.dataRealizacao) - new Date(b.dataRealizacao));
       
@@ -400,8 +404,8 @@ const sendHealthPlanReportViaEmail = asyncHandler(async (req, res) => {
   const evolucoesGeradasPlanoSaude = procedimentosPlanoSaude.length;
   const evolucoesGeradas = evolucoesGeradasParticular + evolucoesGeradasPlanoSaude;
   
-  // Filter to include only particular patients
-  const pacientesAtendidosIds = [...new Set(procedimentosParticular.map(proc => 
+  // Filter to only include patients with health plans (not particular)
+  const pacientesAtendidosIds = [...new Set(procedimentosPlanoSaude.map(proc => 
     proc.paciente._id.toString()
   ))];
   const pacientesAtendidos = pacientesAtendidosIds.length;
@@ -433,8 +437,8 @@ const sendHealthPlanReportViaEmail = asyncHandler(async (req, res) => {
   });
   
   const procedimentosDetalhados = Object.values(procedimentosPorPaciente)
-    // Filter to include only particular patients
-    .filter(paciente => paciente.planoSaude === 'Particular')
+    // Filter to only include patients with health plans (not particular)
+    .filter(paciente => paciente.planoSaude !== 'Particular')
     .map(paciente => {
       paciente.procedimentos.sort((a, b) => new Date(a.dataRealizacao) - new Date(b.dataRealizacao));
       

@@ -48,7 +48,7 @@ const getRelatorios = asyncHandler(async (req, res) => {
   const evolucoesGeradasPlanoSaude = procedimentosPlanoSaude.length;
   const evolucoesGeradas = evolucoesGeradasParticular + evolucoesGeradasPlanoSaude;
   
-  const pacientesAtendidosIds = [...new Set(procedimentosPlanoSaude.map(proc => 
+  const pacientesAtendidosIds = [...new Set(procedimentos.map(proc => 
     proc.paciente._id.toString()
   ))];
   const pacientesAtendidos = pacientesAtendidosIds.length;
@@ -162,8 +162,8 @@ const sendReportViaEmail = asyncHandler(async (req, res) => {
   const evolucoesGeradasPlanoSaude = procedimentosPlanoSaude.length;
   const evolucoesGeradas = evolucoesGeradasParticular + evolucoesGeradasPlanoSaude;
   
-  // Filter to only include patients with health plans (not particular)
-  const pacientesAtendidosIds = [...new Set(procedimentosPlanoSaude.map(proc => 
+  // Include all patients (both with health plans and particular)
+  const pacientesAtendidosIds = [...new Set(procedimentos.map(proc => 
     proc.paciente._id.toString()
   ))];
   const pacientesAtendidos = pacientesAtendidosIds.length;
@@ -284,8 +284,8 @@ const sendParticularReportViaEmail = asyncHandler(async (req, res) => {
   const evolucoesGeradasPlanoSaude = procedimentosPlanoSaude.length;
   const evolucoesGeradas = evolucoesGeradasParticular + evolucoesGeradasPlanoSaude;
   
-  // Filter to only include patients with health plans (not particular)
-  const pacientesAtendidosIds = [...new Set(procedimentosPlanoSaude.map(proc => 
+  // Include all patients (both with health plans and particular)
+  const pacientesAtendidosIds = [...new Set(procedimentos.map(proc => 
     proc.paciente._id.toString()
   ))];
   const pacientesAtendidos = pacientesAtendidosIds.length;
@@ -404,8 +404,8 @@ const sendHealthPlanReportViaEmail = asyncHandler(async (req, res) => {
   const evolucoesGeradasPlanoSaude = procedimentosPlanoSaude.length;
   const evolucoesGeradas = evolucoesGeradasParticular + evolucoesGeradasPlanoSaude;
   
-  // Filter to only include patients with health plans (not particular)
-  const pacientesAtendidosIds = [...new Set(procedimentosPlanoSaude.map(proc => 
+  // Include all patients (both with health plans and particular)
+  const pacientesAtendidosIds = [...new Set(procedimentos.map(proc => 
     proc.paciente._id.toString()
   ))];
   const pacientesAtendidos = pacientesAtendidosIds.length;

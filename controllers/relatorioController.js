@@ -196,8 +196,6 @@ const sendReportViaEmail = asyncHandler(async (req, res) => {
   });
   
   const procedimentosDetalhados = Object.values(procedimentosPorPaciente)
-    // Filter to only include patients with health plans (not particular)
-    .filter(paciente => paciente.planoSaude !== 'Particular')
     .map(paciente => {
       paciente.procedimentos.sort((a, b) => new Date(a.dataRealizacao) - new Date(b.dataRealizacao));
       
@@ -317,8 +315,7 @@ const sendParticularReportViaEmail = asyncHandler(async (req, res) => {
   });
   
   const procedimentosDetalhados = Object.values(procedimentosPorPaciente)
-    // Filter to only include patients with health plans (not particular)
-    .filter(paciente => paciente.planoSaude !== 'Particular')
+    // Include all patients (both with health plans and particular)
     .map(paciente => {
       paciente.procedimentos.sort((a, b) => new Date(a.dataRealizacao) - new Date(b.dataRealizacao));
       
@@ -437,8 +434,7 @@ const sendHealthPlanReportViaEmail = asyncHandler(async (req, res) => {
   });
   
   const procedimentosDetalhados = Object.values(procedimentosPorPaciente)
-    // Filter to only include patients with health plans (not particular)
-    .filter(paciente => paciente.planoSaude !== 'Particular')
+    // Include all patients (both with health plans and particular)
     .map(paciente => {
       paciente.procedimentos.sort((a, b) => new Date(a.dataRealizacao) - new Date(b.dataRealizacao));
       

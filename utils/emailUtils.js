@@ -188,7 +188,7 @@ const sendParticularReportEmail = async (to, reportData, fisioterapeutaName) => 
                 <td style="padding: 8px; border-bottom: 1px solid #ddd;">${formatDate(proc.primeiroProcedimento)}</td>
                 <td style="padding: 8px; border-bottom: 1px solid #ddd;">${formatDate(proc.ultimoProcedimento)}</td>
                 <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${proc.totalProcedimentos}</td>
-                <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${proc.totalEvolucoes}</td>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${proc.totalProcedimentos}</td>
               </tr>
             `).join('')}
           </tbody>

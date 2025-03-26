@@ -113,7 +113,7 @@ const sendReportEmail = async (to, reportData, fisioterapeutaName) => {
                 <td style="padding: 8px; border-bottom: 1px solid #ddd;">${formatDate(proc.primeiroProcedimento)}</td>
                 <td style="padding: 8px; border-bottom: 1px solid #ddd;">${formatDate(proc.ultimoProcedimento)}</td>
                 <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${proc.totalProcedimentos * 5}</td>
-                <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${Math.round((proc.totalProcedimentos) / 5)}</td>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${Math.round((proc.totalProcedimentos * 5) / 5)}</td>
               </tr>
             `).join('')}
           </tbody>
@@ -191,10 +191,6 @@ const sendParticularReportEmail = async (to, reportData, fisioterapeutaName) => 
             <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${evolucoesGeradasParticular || 0}</td>
           </tr>
           <tr>
-            <td style="padding: 8px; border-bottom: 1px solid #ddd;"><strong>Evoluções Planos de Saúde:</strong></td>
-            <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${evolucoesGeradasPlanoSaude || 0}</td>
-          </tr>
-          <tr>
             <td style="padding: 8px;"><strong>Pacientes Atendidos:</strong></td>
             <td style="padding: 8px; text-align: right;">${pacientesAtendidos}</td>
           </tr>
@@ -220,7 +216,7 @@ const sendParticularReportEmail = async (to, reportData, fisioterapeutaName) => 
                 <td style="padding: 8px; border-bottom: 1px solid #ddd;">${formatDate(proc.primeiroProcedimento)}</td>
                 <td style="padding: 8px; border-bottom: 1px solid #ddd;">${formatDate(proc.ultimoProcedimento)}</td>
                 <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${proc.totalProcedimentos}</td>
-                <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${Math.round((proc.totalEvolucoes || 0) / 5)}</td>
+                <td style="padding: 8px; border-bottom: 1px solid #ddd; text-align: right;">${Math.round((proc.totalEvolucoes) / 5)}</td>
               </tr>
             `).join('')}
           </tbody>

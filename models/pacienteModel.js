@@ -12,7 +12,6 @@ const pacienteSchema = mongoose.Schema(
     },
     telefone: {
       type: String,
-      required: [true, 'Por favor adicione um telefone'],
     },
     email: {
       type: String,

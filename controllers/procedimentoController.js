@@ -76,13 +76,20 @@ const createProcedimento = asyncHandler(async (req, res) => {
     res.status(401);
     throw new Error('Não autorizado');
   }
+  let dataAjustada;
+  if (dataRealizacao) {
+    const [year, month, day] = dataRealizacao.split('T')[0].split('-');
+    dataAjustada = new Date(Date.UTC(year, month - 1, day, 12, 0, 0));
+  } else {
+    dataAjustada = Date.now();
+  }
 
   const procedimento = await Procedimento.create({
     nome,
     descricao,
     paciente,
     fisioterapeuta: req.user.id,
-    dataRealizacao: dataRealizacao || Date.now(),
+    dataRealizacao: dataAjustada,
     evolucao,
     planoSaude,
     valorPlano,

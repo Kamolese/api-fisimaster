@@ -29,7 +29,8 @@
     "express-async-handler": "^1.2.0",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.0.3",
-    "nodemailer": "^6.9.1"
+    "nodemailer": "^6.9.1",
+    "puppeteer": "^24.23.0"
   },
   "devDependencies": {
     "concurrently": "^8.0.1",

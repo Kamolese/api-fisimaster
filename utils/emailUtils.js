@@ -1,13 +1,33 @@
 const nodemailer = require('nodemailer');
 
-const transporter = nodemailer.createTransport({
+// Verificar se as variáveis de ambiente estão definidas
+if (!process.env.EMAIL_HOST || !process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+  console.error('Variáveis de ambiente de email não configuradas:');
+  console.error('EMAIL_HOST:', process.env.EMAIL_HOST);
+  console.error('EMAIL_USER:', process.env.EMAIL_USER);
+  console.error('EMAIL_PASS:', process.env.EMAIL_PASS ? '***' : 'undefined');
+}
+
+const transporter = nodemailer.createTransporter({
   host: process.env.EMAIL_HOST,
-  port: process.env.EMAIL_PORT,
-  secure: false,
+  port: parseInt(process.env.EMAIL_PORT) || 587,
+  secure: false, // true para 465, false para outras portas
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
+  tls: {
+    rejectUnauthorized: false
+  }
+});
+
+// Verificar a conexão do transporter
+transporter.verify((error, success) => {
+  if (error) {
+    console.error('Erro na configuração do email:', error);
+  } else {
+    console.log('Servidor de email pronto para enviar mensagens');
+  }
 });
 
 
@@ -20,34 +40,40 @@ const transporter = nodemailer.createTransport({
  * @returns {Promise}
  */
 const sendReportEmail = async (to, reportData, fisioterapeutaName) => {
-  const { 
-    totalProcedimentos, 
-    producao, 
-    producaoParticular,
-    producaoPlanoSaude,
-    totalParticular,
-    totalPlanoSaude,
-    evolucoesGeradas, 
-    evolucoesGeradasParticular,
-    evolucoesGeradasPlanoSaude,
-    pacientesAtendidos, 
-    periodoInicio, 
-    periodoFim,
-    procedimentosDetalhados 
-  } = reportData;
+  try {
+    // Validar dados de entrada
+    if (!to || !reportData || !fisioterapeutaName) {
+      throw new Error('Parâmetros obrigatórios não fornecidos');
+    }
 
-  const formatDate = (dateString) => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('pt-BR');
-  };
+    const { 
+      totalProcedimentos, 
+      producao, 
+      producaoParticular,
+      producaoPlanoSaude,
+      totalParticular,
+      totalPlanoSaude,
+      evolucoesGeradas, 
+      evolucoesGeradasParticular,
+      evolucoesGeradasPlanoSaude,
+      pacientesAtendidos, 
+      periodoInicio, 
+      periodoFim,
+      procedimentosDetalhados 
+    } = reportData;
 
-  const formatCurrency = (value) => {
-    return new Intl.NumberFormat('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-    }).format(value);
-  };
+    const formatDate = (dateString) => {
+      if (!dateString) return '';
+      const date = new Date(dateString);
+      return date.toLocaleDateString('pt-BR');
+    };
+
+    const formatCurrency = (value) => {
+      return new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+      }).format(value);
+    };
 
   const htmlContent = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -106,7 +132,21 @@ const sendReportEmail = async (to, reportData, fisioterapeutaName) => {
     html: htmlContent
   };
 
-  return transporter.sendMail(mailOptions);
+  console.log('Enviando email para:', to);
+  console.log('Configurações do email:', {
+    host: process.env.EMAIL_HOST,
+    port: process.env.EMAIL_PORT,
+    user: process.env.EMAIL_USER
+  });
+
+  const result = await transporter.sendMail(mailOptions);
+  console.log('Email enviado com sucesso:', result.messageId);
+  return result;
+
+  } catch (error) {
+    console.error('Erro detalhado ao enviar email:', error);
+    throw new Error(`Falha ao enviar email: ${error.message}`);
+  }
 };
 
 /**

@@ -9,7 +9,7 @@ if (!process.env.EMAIL_HOST || !process.env.EMAIL_USER || !process.env.EMAIL_PAS
 }
 
 const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST,
+  host: process.env.EMAIL_HOST || 'smtp.gmail.com',
   port: parseInt(process.env.EMAIL_PORT) || 587,
   secure: false, // true para 465, false para outras portas
   auth: {
@@ -18,17 +18,36 @@ const transporter = nodemailer.createTransport({
   },
   tls: {
     rejectUnauthorized: false
+  },
+  // Configurações de timeout mais robustas
+  connectionTimeout: 60000, // 60 segundos
+  greetingTimeout: 30000,   // 30 segundos
+  socketTimeout: 60000,     // 60 segundos
+  // Pool de conexões para melhor performance
+  pool: true,
+  maxConnections: 5,
+  maxMessages: 100,
+  // Configurações de retry
+  retry: {
+    times: 3,
+    delay: 3000
   }
 });
 
-// Verificar a conexão do transporter
-transporter.verify((error, success) => {
-  if (error) {
-    console.error('Erro na configuração do email:', error);
-  } else {
-    console.log('Servidor de email pronto para enviar mensagens');
+// Verificar a conexão do transporter de forma assíncrona
+const verifyEmailConnection = async () => {
+  try {
+    await transporter.verify();
+    console.log('✅ Servidor de email pronto para enviar mensagens');
+    return true;
+  } catch (error) {
+    console.error('❌ Erro na configuração do email:', error.message);
+    return false;
   }
-});
+};
+
+// Verificar conexão na inicialização
+verifyEmailConnection();
 
 
 
@@ -44,6 +63,12 @@ const sendReportEmail = async (to, reportData, fisioterapeutaName) => {
     // Validar dados de entrada
     if (!to || !reportData || !fisioterapeutaName) {
       throw new Error('Parâmetros obrigatórios não fornecidos');
+    }
+
+    // Verificar conexão antes de enviar
+    const isConnected = await verifyEmailConnection();
+    if (!isConnected) {
+      throw new Error('Não foi possível conectar ao servidor de email');
     }
 
     const { 
@@ -129,7 +154,13 @@ const sendReportEmail = async (to, reportData, fisioterapeutaName) => {
     from: `"FisiMaster" <${process.env.EMAIL_USER}>`,
     to,
     subject: `Relatório - Período: ${formatDate(periodoInicio)} a ${formatDate(periodoFim)}`,
-    html: htmlContent
+    html: htmlContent,
+    // Configurações adicionais para melhor entrega
+    headers: {
+      'X-Priority': '3',
+      'X-MSMail-Priority': 'Normal',
+      'Importance': 'Normal'
+    }
   };
 
   console.log('Enviando email para:', to);
@@ -139,13 +170,30 @@ const sendReportEmail = async (to, reportData, fisioterapeutaName) => {
     user: process.env.EMAIL_USER
   });
 
-  const result = await transporter.sendMail(mailOptions);
+  // Enviar email com timeout personalizado
+  const result = await Promise.race([
+    transporter.sendMail(mailOptions),
+    new Promise((_, reject) => 
+      setTimeout(() => reject(new Error('Timeout no envio do email')), 120000) // 2 minutos
+    )
+  ]);
+  
   console.log('Email enviado com sucesso:', result.messageId);
   return result;
 
   } catch (error) {
     console.error('Erro detalhado ao enviar email:', error);
-    throw new Error(`Falha ao enviar email: ${error.message}`);
+    
+    // Melhor tratamento de erros específicos
+    if (error.code === 'ECONNABORTED' || error.message.includes('timeout')) {
+      throw new Error('Timeout na conexão com o servidor de email. Tente novamente em alguns minutos.');
+    } else if (error.code === 'EAUTH') {
+      throw new Error('Erro de autenticação no servidor de email. Verifique as credenciais.');
+    } else if (error.code === 'ECONNECTION') {
+      throw new Error('Não foi possível conectar ao servidor de email. Verifique a configuração de rede.');
+    } else {
+      throw new Error(`Falha ao enviar email: ${error.message}`);
+    }
   }
 };
 

@@ -2,6 +2,7 @@ const asyncHandler = require('express-async-handler');
 const Procedimento = require('../models/procedimentoModel');
 const Paciente = require('../models/pacienteModel');
 const { sendReportEmail, sendParticularReportEmail, sendHealthPlanReportEmail } = require('../utils/emailUtils');
+const { generateReportPDF } = require('../utils/pdfUtils');
 
 const getRelatorios = asyncHandler(async (req, res) => {
   const { startDate, endDate } = req.query;
@@ -472,9 +473,96 @@ const sendHealthPlanReportViaEmail = asyncHandler(async (req, res) => {
   }
 });
 
+/**
+ * @desc    Download complete report as PDF
+ * @route   GET /api/relatorios/download
+ * @access  Private
+ */
+const downloadReportPDF = asyncHandler(async (req, res) => {
+  const { startDate, endDate } = req.query;
+  
+  if (!startDate || !endDate) {
+    res.status(400);
+    throw new Error('Por favor, forneça as datas de início e fim');
+  }
+
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  end.setHours(23, 59, 59, 999);
+
+  // Buscar procedimentos do usuário no período especificado
+  const procedimentos = await Procedimento.find({
+    fisioterapeuta: req.user._id,
+    dataRealizacao: {
+      $gte: start,
+      $lte: end
+    }
+  }).populate('paciente', 'nome planoSaude');
+
+  if (!procedimentos || procedimentos.length === 0) {
+    res.status(404);
+    throw new Error('Nenhum procedimento encontrado no período especificado');
+  }
+
+  // Calcular estatísticas
+  const totalProcedimentos = procedimentos.length;
+  let producaoTotal = 0;
+  let producaoParticular = 0;
+  let producaoPlanoSaude = 0;
+  const pacientesUnicos = new Set();
+
+  procedimentos.forEach(proc => {
+    producaoTotal += proc.valorPlano;
+    pacientesUnicos.add(proc.paciente._id.toString());
+    
+    if (proc.paciente.planoSaude === 'Particular') {
+      producaoParticular += proc.valorPlano;
+    } else {
+      producaoPlanoSaude += proc.valorPlano;
+    }
+  });
+
+  const totalPacientes = pacientesUnicos.size;
+  const totalParticular = procedimentos.filter(p => p.paciente.planoSaude === 'Particular').length;
+  const totalPlanoSaude = procedimentos.filter(p => p.paciente.planoSaude !== 'Particular').length;
+
+  const reportData = {
+    startDate: start,
+    endDate: end,
+    totalProcedimentos,
+    totalPacientes,
+    producaoTotal,
+    producaoParticular,
+    producaoPlanoSaude,
+    totalParticular,
+    totalPlanoSaude
+  };
+
+  try {
+    console.log('📄 Gerando PDF do relatório...');
+    const pdfBuffer = await generateReportPDF(reportData, req.user.nome);
+    
+    // Configurar headers para download
+    const fileName = `relatorio-${req.user.nome.replace(/\s+/g, '-')}-${startDate}-${endDate}.pdf`;
+    
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+    res.setHeader('Content-Length', pdfBuffer.length);
+    
+    console.log('✅ PDF enviado para download');
+    res.send(pdfBuffer);
+    
+  } catch (error) {
+    console.error('❌ Erro ao gerar PDF:', error);
+    res.status(500);
+    throw new Error('Erro ao gerar o relatório em PDF');
+  }
+});
+
 module.exports = {
   getRelatorios,
   sendReportViaEmail,
   sendParticularReportViaEmail,
-  sendHealthPlanReportViaEmail
+  sendHealthPlanReportViaEmail,
+  downloadReportPDF
 };
